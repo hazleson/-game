@@ -701,9 +701,12 @@
             const correctNormalized = normalizeText(gameState.currentProverb.text);
 
             if (normalized === correctNormalized) {
-                let points = 100;
-                if (gameState.hintsUsed === 0) points += 50;
-                if (gameState.mode === 'challenge') points += gameState.timeLeft * 2;
+                let points = 10; // 기본 10점
+                if (gameState.hintsUsed === 0) points += 10; // 힌트 미사용 +10점
+                if (gameState.mode === 'challenge') {
+                    // 시간 보너스: 30초 만점 시 +30점, 1초당 1점
+                    points += gameState.timeLeft;
+                }
                 
                 gameState.score += points;
                 gameState.correctAnswers++;
@@ -772,7 +775,7 @@
             if (gameState.hintsUsed < 1 && !gameState.feedback) {
                 gameState.hintsUsed++;
                 gameState.showHint = true;
-                gameState.score = Math.max(0, gameState.score - 20);
+                gameState.score = Math.max(0, gameState.score - 10);
                 render();
             }
         }
